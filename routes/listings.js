@@ -17,7 +17,7 @@ const {
 
 router
   .route("/")
-  .get(isLogedIn, wrapAsync(allListings))
+  .get(wrapAsync(allListings))
   .post(isLogedIn, upload.single("listing[image]"),validateListing, wrapAsync(newListing));
 
 router.get("/new", isLogedIn, wrapAsync(newListingForm));

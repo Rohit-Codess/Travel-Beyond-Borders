@@ -80,7 +80,6 @@ passport.deserializeUser(User.deserializeUser());
 
 // Here show the flash message for every routes except main route
 app.use((req, res, next) => {
-  res.locals.showNav = true;
   res.locals.currentUser = req.user;
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
@@ -89,7 +88,7 @@ app.use((req, res, next) => {
 
 // Main Route Page
 app.get("/", (req, res) => {
-  res.render("./listings/main.ejs", { showNav: false });
+  res.render("./listings/main.ejs", {pageCSS: "main.css" });
 });
 
 // Make a user an admin
@@ -109,11 +108,6 @@ app.all("*", (req, res, next) => {
 // 9. Error Page for better way to display our errors
 app.use((err, req, res, next) => {
   const { status = 500, message = "Something went wrong" } = err;
-  // if (req.xhr || req.headers.accept.indexOf("json") > -1) {
-  //   // If request is from AJAX (like fetch API)
-  //   res.status(status).json({ error: message });
-  // } else {
-    // Otherwise render beautiful error page
     if (err.code === 'LIMIT_FILE_SIZE') {
       req.flash("error", "File too large! Max 500KB allowed.");
       return res.redirect("back");

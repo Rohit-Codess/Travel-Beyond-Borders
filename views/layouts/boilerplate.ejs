@@ -33,7 +33,9 @@
       href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css"
     />
     <link rel="stylesheet" href="/css/style.css" />
-    <link rel="stylesheet" href="/css/mobile.css" />
+    <% if(typeof pageCSS !== "undefined") { %>
+    <link rel="stylesheet" href="/css/phoneCSS/<%= pageCSS %>" />
+    <% } %>
   </head>
   <body>
     <%- include("../includes/navbar.ejs") %> <%-

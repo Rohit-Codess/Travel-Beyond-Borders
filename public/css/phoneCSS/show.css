@@ -1,0 +1,41 @@
+@media (max-width: 1000px) {
+  .show-btns {
+    font-size: 12px !important;
+    align-items: center;
+  }
+
+  .show-card {
+    width: 100% !important;
+  }
+
+  .show-img {
+    height: 300px !important;
+  }
+}
+@media (max-width: 800px) {
+  .show-img {
+    height: 250px !important;
+  }
+
+  .show-para li {
+    font-size: 0.8rem !important;
+  }
+
+  .show-user {
+    font-size: 0.6rem !important;
+  }
+
+  .show-btns {
+    font-size: 12px !important;
+    align-items: center;
+  }
+}
+
+@media (max-width: 450px) {
+  .show-btns {
+    font-size: 10px !important;
+    align-items: center;
+    padding: 10px 20px !important;
+    gap: 0px !important;
+  }
+}

@@ -30,7 +30,7 @@ module.exports.allListings = async (req, res) => {
     return res.redirect("/listings")
   }
 
-  res.render("./listings/index.ejs", { allData });
+  res.render("./listings/index.ejs", { allData , pageCSS : "index.css" });
 };
 
 // 3.new GET Route to display the form
@@ -59,7 +59,7 @@ module.exports.showListing = async (req, res) => {
     return res.redirect("/listings");
   }
 
-  return res.render("./listings/show.ejs", { listing });
+  return res.render("./listings/show.ejs", { listing, pageCSS: "show.css" });
 };
 
 // 4.POST Route using form to create and add listing in Index Route
