@@ -32,17 +32,17 @@
         <!-- Title -->
         <div class="form-floating mb-3">
           <input name="listing[title]" type="text" class="form-control shadow-sm rounded-4" id="title" required minlength="10" maxlength="100" autofocus>
-          <label for="title">Listing Title</label>
+          <label for="title">Place Name</label>
           <!-- <div class="valid-feedback">Perfect Title!</div>
           <div class="invalid-feedback">Title must be 10-100 characters long.</div> -->
         </div>
 
         <!-- Description -->
         <div class="form-floating mb-3">
-          <textarea name="listing[description]" class="form-control shadow-sm rounded-4" id="description" style="height: 120px;" minlength="100" maxlength="500" required></textarea>
+          <textarea name="listing[description]" class="form-control shadow-sm rounded-4" id="description" style="height: 120px;" minlength="20" maxlength="500" required></textarea>
           <label for="description">Detailed Description</label>
           <div class="valid-feedback">Awesome Description!</div>
-          <div class="invalid-feedback">Description must be at least 100 characters.</div>
+          <div class="invalid-feedback">Description must be at least 20 characters.</div>
         </div>
 
         <!-- Select any field where belong this place -->
@@ -78,7 +78,7 @@
           <div class="col-md-4 mb-3">
             <div class="form-floating">
               <input name="listing[price]" type="number" class="form-control shadow-sm rounded-4" id="price" placeholder="1500" required>
-              <label for="price">Spend Money in a Day</label>
+              <label for="price">Daily Spend</label>
               <div class="valid-feedback">Price Looks Good!</div>
               <div class="invalid-feedback">price is not negative number.</div>
             </div>

@@ -11,6 +11,7 @@
   const preview = document.getElementById("preview");
   const fileInput = form.querySelector('input[type="file"]');
   const inputs = form.querySelectorAll("input, textarea, select");
+  const MAX_FILE_SIZE = 500 * 1024;
 
   submitButton.disabled = true; // Button disabled initially
 
@@ -35,9 +36,9 @@
       title.setCustomValidity("");
     }
 
-    if (description.value.trim().length < 100) {
+    if (description.value.trim().length < 20) {
       description.setCustomValidity(
-        "Description must be at least 100 characters."
+        "Description must be at least 20 characters."
       );
       isValid = false;
     } else {
@@ -90,15 +91,33 @@
     return isValid;
   }
 
+  // Validate Image file size
+  function checkFileSize(fileInput) {
+    const file = fileInput.files[0];
+    if (file && file.size > MAX_FILE_SIZE) {
+      Swal.fire({
+        icon: 'error',
+        title: 'File too large!',
+        text: 'Please select an image smaller than 500 KB.',
+        confirmButtonColor: '#d33'
+      });
+      fileInput.value = ""; // Clear the selected file
+      return false;
+    }
+    return true;
+  }
   // Attach Live Validation
   inputs.forEach((input) => {
     input.addEventListener("input", validateFormFields);
   });
+
   fileInput.addEventListener("change", () => {
+    checkFileSize(fileInput);
     validateFormFields();
     previewImage();
   });
 
+  
   // Preview Image
   function previewImage() {
     if (fileInput.files && fileInput.files[0]) {

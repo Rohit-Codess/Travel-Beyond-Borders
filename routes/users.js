@@ -4,7 +4,7 @@ const wrapAsync = require("../utilities/wrapAsync.js");
 const passport = require("passport");
 const multer = require("multer");
 const { storage } = require("../cloudConfig.js");
-const upload = multer({ storage });
+const upload = multer({ storage, limits: { fileSize: 500 * 1024 } });
 const { saveRedirectUrl, isLogedIn } = require("../middleware.js");
 const {
   signupForm,

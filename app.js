@@ -114,6 +114,11 @@ app.use((err, req, res, next) => {
   //   res.status(status).json({ error: message });
   // } else {
     // Otherwise render beautiful error page
+    if (err.code === 'LIMIT_FILE_SIZE') {
+      req.flash("error", "File too large! Max 500KB allowed.");
+      return res.redirect("back");
+    }
+    next(err);
     res.status(status).render("./listings/error.ejs", { err });
   // }
 });

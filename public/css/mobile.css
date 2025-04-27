@@ -66,10 +66,6 @@
     margin-bottom: 1.5rem !important;
   }
 
-  /* .listing-card img{
-    height: 360px !important;
-  } */
-
   .badge {
     font-size: 0.7rem !important;
   }
@@ -87,10 +83,6 @@
   .index-heading {
     font-size: 1.8rem !important;
   }
-
-  /* .listing-card img{
-    height: 340px !important;
-  } */
 
   .badge {
     font-size: 0.55rem !important;
@@ -111,7 +103,7 @@
   }
 
   .listing-card img{
-    height: 300px !important;
+    height: 250px !important;
   }
 }
 
@@ -121,6 +113,6 @@
   }
 
   .listing-card img{
-    height: 230px !important;
+    height: 220px !important;
   }
 }
