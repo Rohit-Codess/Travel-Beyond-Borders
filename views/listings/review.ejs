@@ -1,0 +1,47 @@
+<% layout("/layouts/boilerplate") %>
+<div class="col-md-6 offset-md-3 mt-3">
+  <h3 class="mb-2"><%= listing.title %></h3>
+  <img
+    src="<%= listing.image.url%>"
+    class="card-img-top"
+    alt="listing-image"
+    style="height: 60vh; object-fit: cover; border-radius: 20px;"
+  />
+  <p><strong>Description :</strong> <%=listing.description %></p>
+  <form
+    method="post"
+    action="/listings/<%= listing._id%>/review"
+    class="needs-validation"
+    id="reviewForm"
+    novalidate
+  >
+    <div class="mb-2">
+      <strong><label for="review" class="form-label">Drop Your Review Here</label></strong>
+      <textarea
+        name="comment"
+        type="text"
+        id="comment"
+        placeholder="Share your experience..."
+        minlength="10"
+        maxlength="300"
+        rows="4"
+        class="form-control"
+        required
+      ></textarea
+      >
+      <div class="invalid-feedback">Comment must be between 10 to 300 characters.</div>
+    </div>
+    <div class="mb-3">
+      <strong><label for="rating" class="form-label">Rating (1 to 5)</label></strong>
+      <select name="rating" id="rating" class="form-select" required>
+        <option value="">Select rating</option>
+        <% for (let i = 1; i <= 5; i++) { %>
+          <option value="<%= i %>"><%= i %> Star<%= i > 1 ? 's' : '' %></option>
+        <% } %>
+      </select>
+      <div class="invalid-feedback">must be rating</div>
+    </div>
+    <button class="btn btn-info btn-edit mb-4">send</button>
+  </form>
+  </div>
+</div>

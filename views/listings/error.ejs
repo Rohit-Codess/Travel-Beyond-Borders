@@ -1,0 +1,23 @@
+<% layout("/layouts/boilerplate") %>
+<div class="d-flex align-items-center justify-content-center vh-100 bg-light">
+    <div class="text-center animate__animated animate__fadeInUp">
+      <img src="/image/error.svg" alt="Error Illustration" class="img-fluid" style="max-width: 300px;" />
+    
+      <h1 class="display-4 text-danger mt-4 fw-bold">Oops! Something went wrong</h1>
+      
+      <p class="lead text-muted mt-3 mb-4">
+        We're sorry, but the page you're looking for can't be found or an unexpected error occurred.
+      </p>
+  
+      <div class="mb-3">
+        <code class="bg-white text-danger px-3 py-2 rounded shadow-sm d-inline-block">
+          Status-Code: <%= err.status || 500 %> - <%= err.message || 'Internal Server Error' %>
+        </code>
+      </div>
+  
+      <a href="/listings" class="btn btn-primary px-4 py-2 rounded-pill shadow">
+        <i class="fa fa-home me-2"></i>Go Back Home
+      </a>
+    </div>
+  </div>
+  

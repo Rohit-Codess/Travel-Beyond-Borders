@@ -1,0 +1,4 @@
+## app.js is the main file of this directory which operate everything in this project.
+// Index Route : Main page of this travel content.
+// Show Route : Display a specific content based on there id
+// new Route :  It used create a new listing, in app.js use new route before show route rather than you got an error because show route generally check it as an id.

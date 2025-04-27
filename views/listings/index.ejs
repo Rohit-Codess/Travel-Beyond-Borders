@@ -1,0 +1,115 @@
+<% layout("/layouts/boilerplate") %>
+
+<main
+  class="min-vh-100"
+  style="background: linear-gradient(to right, #f8f9fa, #eef2f7)"
+>
+  <section class="container py-3">
+    <h1
+      class="index-heading text-center fw-bold text-success mb-3 animate__animated animate__zoomInDown animate__delay-1s animate__slow"
+    >
+      <i class="fa-solid fa-location-dot me-2" aria-label="location"></i>
+      Explore Beautiful Places | Beyond Borders
+    </h1>
+
+    <div
+      class="glass-effect mb-5 rounded-4 shadow d-flex flex-nowrap justify-content-between align-items-center gap-4 animate__animated animate__fadeInLeft animate__delay-1s animate__slow"
+    >
+      <!-- Filters -->
+      <div
+        class="filters d-flex flex-nowrap gap-2 overflow-auto py-2"
+        style="scroll-snap-type: x mandatory"
+      >
+        <% const categories = [ { name: "zoo", icon: "fa-hippo" }, { name:
+        "waterfall", icon: "fa-water" }, { name: "forest", icon: "fa-tree" }, {
+        name: "resort", icon: "fa-hotel" }, { name: "mall", icon: "fa-city" },
+        {name: "temple", icon: "fa-om" }, { name: "lake", icon:
+        "fa-water-ladder"}, { name: "museum", icon: "fa-landmark" }, { name:
+        "park", icon:"fa-mountain-sun" }, { name: "river", icon: "fa-water" } ];
+        %> <% for(let cat of categories) { %>
+        <form action="/listings" method="GET">
+          <input type="hidden" name="category" value="<%= cat.name %>" />
+          <button
+            type="submit"
+            class="filter-place text-center bg-transparent border-0"
+          >
+            <i
+              class="fa-solid <%= cat.icon %> filter-icon filter-place"
+              aria-label="<%= cat.name %>"
+            ></i>
+            <label
+              class="filter-label text-capitalize form-label fw-semibold"
+              for="category"
+              ><%= cat.name %></label
+            >
+          </button>
+        </form>
+        <% } %>
+      </div>
+      
+    </div>
+
+    <!-- Listing Cards -->
+    <div class="row g-4">
+      <% for (let data of allData) { %>
+      <div class="col-lg-4 col-md-6 animate__animated animate__fadeInUp">
+        <div
+          class="card border-0 shadow-sm rounded-4 h-100 position-relative listing-card"
+        >
+          <!-- Image Section -->
+          <div class="position-relative overflow-hidden rounded-top-4 mb-3">
+            <img
+              src="<%= data.image.url %>"
+              class="card-img-top"
+              style="height: 400px; object-fit: cover; width: 100%;"
+              alt="<%= data.title %> image"
+              loading="lazy"
+            />
+            <span
+              class="badge bg-success position-absolute top-0 end-0 m-2 rounded-pill shadow-sm p-2"
+            >
+              ₹<%= data.price.toLocaleString("en-IN") %>/Day
+            </span>
+          </div>
+
+          <!-- Card Content -->
+          <div class="card-body d-flex flex-column mx-2 mb-3">
+            <h5 class="card-title fw-bold text-primary mb-3 user-name">
+              <!-- User Name -->
+              <i class="fa-solid fa-user me-1" aria-label="userLogo"></i>
+              <a
+                href="/users/<%= data.createdBy._id %>/profile"
+                class="stretched-link text-decoration-none"
+                rel="noopener noreferrer"
+              >
+                @<%= data.createdBy.username %>
+              </a>
+            </h5>
+
+            <!-- Title -->
+            <div class="small text-muted listing-title">
+              <%= data.title.length > 20 ? data.title.slice(0, 60) + "..." :
+              data.title %>
+            </div>
+
+            <!-- Ratings -->
+            <div class="text-warning mb-2">
+              <% for(let i = 0; i < 4; i++) { %>
+              <i class="fa-solid fa-star" aria-label="star"></i>
+              <% } %> <% for(let i = 4; i < 5; i++) { %>
+              <i class="fa-regular fa-star" aria-label="start"></i>
+              <% } %>
+            </div>
+            <!-- Description -->
+            <div class="small text-muted listing-description">
+              <%= data.description.length > 20 ? data.description.slice(0, 100) + "..." :
+              data.description %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <% } %>
+    </div>
+  </section>
+</main>
+

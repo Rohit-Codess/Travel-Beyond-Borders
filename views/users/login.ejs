@@ -1,0 +1,89 @@
+<% layout("/layouts/boilerplate") %> 
+
+<section
+  style="
+    height: 100vh;
+    background-image: url('/image/mobile-sm-bg.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+  "
+>
+  <div
+    class="overlay position-absolute w-100 h-100"
+    style="background-color: rgba(0, 0, 0, 0.4)"
+  ></div>
+
+  <div class="container d-flex justify-content-center align-items-center min-vh-100 position-relative">
+    <div class="card shadow-lg border-0 rounded-4 w-100" style="max-width: 900px; background: linear-gradient(white, orange); z-index: 2;">
+      <div class="row g-0">
+        <!-- Left Side - Form -->
+        <div class="col-md-6 p-5">
+          <h3 class="text-center text-success mb-4 animate__animated animate__fadeInDown">
+            <i class="fa-solid fa-mountain-sun me-2"></i>
+            Log In <span class="text-danger">Beyond</span> Borders
+          </h3>
+
+          <form method="POST" action="/users/login" class="needs-validation" novalidate>
+
+            <!-- Email -->
+            <div class="mb-3">
+              <label for="email" class="form-label fw-semibold">Email Address</label>
+              <input type="email" class="form-control" id="email" name="email" required />
+              <div class="invalid-feedback">Please enter your email address.</div>
+            </div>
+
+            <!-- Password -->
+            <div class="mb-3">
+              <label for="password" class="form-label fw-semibold">Password</label>
+              <div class="input-group">
+                <input type="password" class="form-control" id="password" name="password" required minlength="8" />
+                <button type="button" class="btn bg-light toggle-password" data-target="password">
+                  <i class="fa-solid fa-eye"></i>
+                </button>
+              </div>
+              <div class="invalid-feedback">Password must be at least 8 characters.</div>
+            </div>
+
+            <!-- Remember Me + Forgot Password -->
+            <div class="d-flex justify-content-end align-items-center mb-3">
+              <a href="/users/forget-password" class="small text-decoration-none text-primary">
+                Forgot Password?
+              </a>
+            </div>
+
+
+            <!-- Submit -->
+            <div class="mb-3">
+              <button class="btn btn-success w-100" type="submit">
+                <i class="fa-solid fa-right-to-bracket me-2"></i> Log In
+              </button>
+            </div>
+
+            <!-- Signup Link -->
+            <div class="text-center mt-2">
+              <small class="text-muted">
+                Don't have an account?
+                <a href="/users/signup" class="text-decoration-none text-primary fw-bold">Sign Up</a>
+              </small>
+            </div>
+
+          </form>
+        </div>
+
+        <!-- Right Side - Animation -->
+        <div class="col-md-6 d-none d-md-flex justify-content-center align-items-center p-4">
+          <lottie-player
+            src="/json/loginImage.json"
+            background="transparent"
+            speed="1"
+            style="width: 100%; max-width: 300px;"
+            loop
+            autoplay
+          ></lottie-player>
+        </div>        
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,136 @@
+<% layout("/layouts/boilerplate") %>
+
+<section
+  class="min-vh-100 d-flex flex-column justify-content-start"
+  style="background: linear-gradient(to right, #ffecd2 0%, #fcb69f 100%)"
+>
+  <div class="container py-5 flex-grow-1">
+    <div class="col-md-10 offset-md-1">
+      <!-- Listing Title -->
+      <h2
+        class="text-center text-success fw-bold mb-4 animate__animated animate__fadeInDown"
+      >
+        <i class="fa-solid fa-location-dot me-2"></i> <%= listing.title %>
+      </h2>
+
+      <!-- Image Section -->
+      <div
+        class="card border-0 shadow-lg rounded-5 mb-5 animate__animated animate__fadeInUp px-4 py-3"
+      >
+        <img
+          src="<%= listing.image.url %>"
+          class="card-img-top rounded-top-5"
+          alt="listing-image"
+          style="height: 60vh; object-fit: cover"
+        />
+        <div class="card-body bg-light rounded-bottom-5 px-4">
+          <ul class="list-unstyled px-4">
+            <li class="mb-2">
+              <strong>Description:</strong> <%= listing.description %>
+            </li>
+            <li class="mb-2">
+              <strong>Price:</strong> ₹<%= listing.price.toLocaleString("en-IN")
+              %>/Day
+            </li>
+            <li class="mb-2">
+              <strong>Location:</strong> <%= listing.location %>
+            </li>
+            <li class="mb-2">
+              <strong>Country:</strong> <%= listing.country %>
+            </li>
+          </ul>
+          <p
+            class="d-flex justify-content-end mb-3 small text-muted mx-4 fw-semibold"
+          >
+            <i class="fa-solid fa-user-circle me-2 mt-1"></i> Created By: <%=
+            listing.createdBy.username %>
+          </p>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div
+        class="d-flex gap-3 justify-content-center mb-5 animate__animated animate__fadeIn"
+      >
+        <% if(currentUser && (listing.createdBy._id.equals(currentUser._id) ||
+        currentUser.isAdmin)) { %>
+        <a
+          href="/listings/<%= listing._id %>/edit"
+          class="btn btn-warning shadow-sm px-4 py-2 rounded-4"
+        >
+          <i class="fa-solid fa-pen-to-square me-2"></i> Edit
+        </a>
+        <form
+          method="post"
+          action="/listings/<%= listing._id %>?_method=DELETE"
+        >
+          <button
+            class="btn btn-danger shadow-sm px-4 py-2 rounded-4"
+            onclick="return confirm('Do you really want to delete this listing?')"
+          >
+            <i class="fa-solid fa-trash-can me-2"></i> Delete
+          </button>
+        </form>
+        <% } %>
+        <a
+          href="/listings/<%= listing._id %>/review"
+          class="btn btn-primary shadow-sm px-4 py-2 rounded-4"
+        >
+          <i class="fa-solid fa-star me-2"></i> Share Your Review
+        </a>
+      </div>
+
+      // Reviews Section
+      <h3 class="text-center mb-4 text-primary fw-bold">User Reviews</h3>
+
+      <% if (listing.reviews.length > 0) { %>
+      <div class="row g-4">
+        <% listing.reviews.forEach(review => { %>
+        <div class="col-md-6 animate__animated animate__fadeInUp">
+          <div class="card border-0 shadow rounded-4 h-100">
+            <div class="card-body d-flex flex-column justify-content-between">
+              <div class="px-4 py-3">
+                <h5 class="card-title text-success mb-2">
+                  @<%= review.author.username %>
+                </h5>
+                <p class="card-text"><i><%= review.comment %></i></p>
+                <div class="text-warning mb-2">
+                  <% for (let i = 0; i < review.rating; i++) { %>
+                  <i class="fa-solid fa-star"></i>
+                  <% } %> <% for (let i = review.rating; i < 5; i++) { %>
+                  <i class="fa-regular fa-star"></i>
+                  <% } %>
+                </div>
+                <p class="text-muted small mb-2">
+                  Posted on <%= review.createdAt.toDateString() %>
+                </p>
+              </div>
+
+              <% if(currentUser && (review.author._id.equals(currentUser._id) ||
+              currentUser.isAdmin)) { %>
+              <form
+                method="POST"
+                action="/listings/<%= listing._id %>/review/<%= review._id %>?_method=DELETE"
+                onsubmit="return confirm('Are you sure you want to delete your review?')"
+                class="px-2"
+              >
+                <button
+                  class="btn btn-sm btn-outline-danger w-100 rounded-4 mb-1"
+                >
+                  <i class="fa-solid fa-xmark me-1"></i> Delete Review
+                </button>
+              </form>
+              <% } %>
+            </div>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+      <% } else { %>
+      <p class="text-center text-muted mt-4">
+        No reviews yet. Be the first to share your thoughts!
+      </p>
+      <% } %>
+    </div>
+  </div>
+</section>
