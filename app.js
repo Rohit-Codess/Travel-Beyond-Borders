@@ -23,100 +23,93 @@ const adminRouter = require("./routes/admin.js");
 const Listing = require("./models/listing.js");
 
 const mongoDBUrl = process.env.ATLAS_DB_URL;
-// const mongoDBUrl = "mongodb://127.0.0.1:27017/travel";
-async function main() {
-  mongoose.connect(mongoDBUrl)
+if (!mongoDBUrl) {
+  throw new Error("ATLAS_DB_URL environment variable is not set!");
 }
-main()
-  .then((res) => {
-    console.log("Connect DB to travel ATLAS DB");
-  })
-  .catch((err) => {
-    console.log(err);
+
+async function main() {
+  await mongoose.connect(mongoDBUrl);
+  console.log("Connected to travel ATLAS DB");
+
+  const store = MongoStore.create({
+    mongoUrl: mongoDBUrl,
+    crypto: {
+      secret: process.env.SECRET,
+    },
+    touchAfter: 24 * 3600,
   });
 
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
-app.use(express.urlencoded({ extended: true }));
-app.use(methodOverride("_method"));
-app.engine("ejs", ejsMate);
-app.use(express.static(path.join(__dirname, "/public")));
+  store.on("error", (err) => {
+    console.log("Found some error in mongo session", err);
+  });
 
-const store = MongoStore.create({
-  mongoUrl : mongoDBUrl,
-  crypto : {
-    secret : process.env.SECRET,
-  },
-  touchAfter: 24 * 3600,
-});
+  const sessionOption = {
+    store,
+    secret: process.env.SECRET,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      expires: Date.now() + 3 * 24 * 60 * 60 * 1000,
+      maxAge: 3 * 24 * 60 * 60 * 1000,
+    },
+  };
 
-store.on("error" , () => {
-  console.log("Found some error in mongo session", err);
-})
-const sessionOption = {
-  store,
-  secret: process.env.SECRET,
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-    expires: Date.now() + 3 * 24 * 60 * 60 * 1000,
-    maxAge: 3 * 24 * 60 * 60 * 1000,
-  },
-};
+  app.use(session(sessionOption));
+  app.use(flash()); // display one time message
 
+  app.use(passport.initialize());
+  app.use(passport.session());
+  passport.use(
+    new LocalStrategy({ usernameField: "email" }, User.authenticate())
+  );
 
-// save session for user better experiance
-app.use(session(sessionOption));
-app.use(flash()); // display one time message
+  passport.serializeUser(User.serializeUser());
+  passport.deserializeUser(User.deserializeUser());
 
-app.use(passport.initialize());
-app.use(passport.session());
-passport.use(
-  new LocalStrategy({ usernameField: "email" }, User.authenticate())
-);
+  // Here show the flash message for every routes except main route
+  app.use((req, res, next) => {
+    res.locals.currentUser = req.user;
+    res.locals.success = req.flash("success");
+    res.locals.error = req.flash("error");
+    next();
+  });
 
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+  // Main Route Page
+  app.get("/", (req, res) => {
+    res.render("./listings/main.ejs", {pageCSS: "main.css" });
+  });
 
-// Here show the flash message for every routes except main route
-app.use((req, res, next) => {
-  res.locals.currentUser = req.user;
-  res.locals.success = req.flash("success");
-  res.locals.error = req.flash("error");
-  next();
-});
+  // Make a user an admin
+  // User.findOneAndUpdate({ _id: "6800d9e36ee64a7685923c50"}, { isAdmin: true },{new : true}).then(console.log);
 
-// Main Route Page
-app.get("/", (req, res) => {
-  res.render("./listings/main.ejs", {pageCSS: "main.css" });
-});
+  // Listings using Router
+  app.use("/listings", listingsRouter);
+  app.use("/listings/:id/review", reviewsRouter);
+  app.use("/users", userRouter);
+  app.use("/admin/users", adminRouter);
 
-// Make a user an admin
-// User.findOneAndUpdate({ _id: "6800d9e36ee64a7685923c50"}, { isAdmin: true },{new : true}).then(console.log);
+  // 8. If No any Route Matched Then Execute this Route
+  app.all("*", (req, res, next) => {
+    next(new ExpressError(404, "Page Not Found"));
+  });
 
-// Listings using Router
-app.use("/listings", listingsRouter);
-app.use("/listings/:id/review", reviewsRouter);
-app.use("/users", userRouter);
-app.use("/admin/users", adminRouter);
+  // 9. Error Page for better way to display our errors
+  app.use((err, req, res, next) => {
+    const { status = 500, message = "Something went wrong" } = err;
+      if (err.code === 'LIMIT_FILE_SIZE') {
+        req.flash("error", "File too large! Max 500KB allowed.");
+        return res.redirect("back");
+      }
+      next(err);
+      res.status(status).render("./listings/error.ejs", { err });
+    // }
+  });
 
-// 8. If No any Route Matched Then Execute this Route
-app.all("*", (req, res, next) => {
-  next(new ExpressError(404, "Page Not Found"));
-});
+  app.listen(8080, () => {
+    console.log(`App is listening at port 8080`);
+  });
+}
 
-// 9. Error Page for better way to display our errors
-app.use((err, req, res, next) => {
-  const { status = 500, message = "Something went wrong" } = err;
-    if (err.code === 'LIMIT_FILE_SIZE') {
-      req.flash("error", "File too large! Max 500KB allowed.");
-      return res.redirect("back");
-    }
-    next(err);
-    res.status(status).render("./listings/error.ejs", { err });
-  // }
-});
-
-app.listen(8080, () => {
-  console.log(`App is listing at port 8080`);
+main().catch((err) => {
+  console.error("Failed to start app:", err);
 });
