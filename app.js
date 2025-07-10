@@ -22,7 +22,7 @@ const userRouter = require("./routes/users.js");
 const adminRouter = require("./routes/admin.js");
 const Listing = require("./models/listing.js");
 
-const mongoDBUrl = process.env.ATLAS_DB_URL || "mongodb://127.0.0.1:27017/travel";
+const mongoDBUrl = process.env.ATLAS_DB_URL;
 // const mongoDBUrl = "mongodb://127.0.0.1:27017/travel";
 async function main() {
   mongoose.connect(mongoDBUrl)
