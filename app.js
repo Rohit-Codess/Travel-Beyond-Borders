@@ -31,15 +31,30 @@ if (!mongoDBUrl) {
   process.exit(1);
 }
 
+// MongoDB connection options for better reliability
+const mongoOptions = {
+  serverSelectionTimeoutMS: 30000, // Increase timeout to 30 seconds
+  socketTimeoutMS: 45000,
+  family: 4, // Use IPv4, skip trying IPv6
+};
+
 async function main() {
-  mongoose.connect(mongoDBUrl)
+  await mongoose.connect(mongoDBUrl, mongoOptions);
 }
+
 main()
   .then((res) => {
-    console.log("Connect DB to travel ATLAS DB");
+    console.log("✅ Connected to MongoDB Atlas successfully!");
   })
   .catch((err) => {
-    console.log("Database connection error:", err);
+    console.error("❌ Database connection error:");
+    console.error("Error code:", err.code);
+    console.error("Error message:", err.message);
+    console.error("\n🔧 Troubleshooting steps:");
+    console.error("1. Verify ATLAS_DB_URL is set in Render environment variables");
+    console.error("2. Check MongoDB Atlas Network Access: allow 0.0.0.0/0");
+    console.error("3. Verify your MongoDB cluster is running (not paused)");
+    console.error("4. Check if the cluster URL is correct in MongoDB Atlas");
     process.exit(1);
   });
 
@@ -130,6 +145,7 @@ app.use((err, req, res, next) => {
   // }
 });
 
-app.listen(8080, () => {
-  console.log(`App is listing at port 8080`);
+const port = process.env.PORT || 8080;
+app.listen(port, () => {
+  console.log(`🚀 Server is running on port ${port}`);
 });
