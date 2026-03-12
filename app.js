@@ -24,6 +24,13 @@ const Listing = require("./models/listing.js");
 
 const mongoDBUrl = process.env.ATLAS_DB_URL;
 // const mongoDBUrl = "mongodb://127.0.0.1:27017/travel";
+
+if (!mongoDBUrl) {
+  console.error("ERROR: ATLAS_DB_URL environment variable is not set!");
+  console.error("Please set environment variables in Render dashboard.");
+  process.exit(1);
+}
+
 async function main() {
   mongoose.connect(mongoDBUrl)
 }
@@ -32,7 +39,8 @@ main()
     console.log("Connect DB to travel ATLAS DB");
   })
   .catch((err) => {
-    console.log(err);
+    console.log("Database connection error:", err);
+    process.exit(1);
   });
 
 app.set("view engine", "ejs");
@@ -41,6 +49,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
+
+if (!process.env.SECRET) {
+  console.error("ERROR: SECRET environment variable is not set!");
+  process.exit(1);
+}
 
 const store = MongoStore.create({
   mongoUrl : mongoDBUrl,
