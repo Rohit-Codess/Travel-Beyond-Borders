@@ -2,7 +2,7 @@
 Discover and share beautiful destinations around the world!
 This project allows users to create, explore, review, and manage listings of travel destinations with authentication and admin panel features.
 
-## Project Structure
+## Project Structure.
 ```
 Travel_Beyond_Borders/
 ├── models/
